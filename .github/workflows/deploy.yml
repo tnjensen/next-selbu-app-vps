@@ -1,0 +1,74 @@
+name: Deploy Selbu App
+
+on:
+  push:
+    branches: [ "main" ]
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20.20.2"
+          cache: npm
+
+      - name: Install deps
+        run: npm ci
+
+      - name: Build
+        env:
+          NODE_ENV: production
+        run: npm run build
+
+      - name: Tar project for VPS
+        run: |
+          tar -czf deploy.tgz \
+            --exclude node_modules \
+            --exclude .next \
+            --exclude deploy.tgz \
+            .
+
+      - name: Upload to VPS
+        uses: appleboy/scp-action@v0.1.7
+        with:
+          host: ${{ secrets.VPS_HOST }}
+          username: ${{ secrets.VPS_USER }}
+          key: ${{ secrets.VPS_SSH_KEY }}
+          source: "deploy.tgz"
+          target: "${{ secrets.VPS_PATH }}/"
+
+      - name: Deploy on VPS (migrate + restart)
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.VPS_HOST }}
+          username: ${{ secrets.VPS_USER }}
+          key: ${{ secrets.VPS_SSH_KEY }}
+          script: |
+            set -e
+            cd ${{ secrets.VPS_PATH }}
+
+            # pakk ut
+            tar -xzf deploy.tgz
+            rm -f deploy.tgz
+
+            # env må ligge på VPS. Anbefalt fil:
+            # - $VPS_PATH/.env
+            # der DATABASE_URL og auth secrets ligger.
+            # (Ikke send secrets i repo.)
+
+            # installer + build (valgfritt siden CI build allerede kjørte,
+            # men på VPS er dette ofte enklest og mest deterministisk)
+            npm ci
+            npm run build
+
+            # migrasjoner
+            npx prisma migrate deploy
+
+            # pm2 restart (start hvis ikke finnes)
+            pm2 start npm --name blogg -- start --update-env || pm2 restart blogg
+            pm2 save
