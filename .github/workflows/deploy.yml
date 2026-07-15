@@ -36,21 +36,21 @@ jobs:
       - name: Upload to VPS
         uses: appleboy/scp-action@v0.1.7
         with:
-          host: ${{ secrets.VPS_HOST }}
-          username: ${{ secrets.VPS_USER }}
-          key: ${{ secrets.VPS_SSH_KEY }}
+          host: ${{ secrets.SERVER_HOST }}
+          username: ${{ secrets.SERVER_USER }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
           source: "deploy.tgz"
-          target: "${{ secrets.VPS_PATH }}/"
+          target: "${{ secrets.DEPLOY_PATH }}/"
 
       - name: Deploy on VPS (migrate + restart)
         uses: appleboy/ssh-action@v1.0.3
         with:
-          host: ${{ secrets.VPS_HOST }}
-          username: ${{ secrets.VPS_USER }}
-          key: ${{ secrets.VPS_SSH_KEY }}
+          host: ${{ secrets.SERVER_HOST }}
+          username: ${{ secrets.SERVER_USER }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
           script: |
             set -e
-            cd ${{ secrets.VPS_PATH }}
+            cd ${{ secrets.DEPLOY_PATH }}
 
             # pakk ut
             tar -xzf deploy.tgz
@@ -70,5 +70,5 @@ jobs:
             npx prisma migrate deploy
 
             # pm2 restart (start hvis ikke finnes)
-            pm2 start npm --name blogg -- start --update-env || pm2 restart blogg
+            pm2 start npm --name selbu-app -- start --update-env || pm2 restart selbu-app
             pm2 save
