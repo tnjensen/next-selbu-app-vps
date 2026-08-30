@@ -72,5 +72,7 @@ jobs:
             npx prisma migrate deploy
 
             # pm2 restart (start hvis ikke finnes). Appen kjøres på port 3002 for å matche nginx.
-            PORT=3002 pm2 start npm --name selbu -- start --update-env || pm2 restart selbu
+            # Fjern evt. duplikater først, så prosessen blir idempotent.
+            pm2 delete selbu 2>/dev/null || true
+            PORT=3002 pm2 start npm --name selbu -- start --update-env
             pm2 save
