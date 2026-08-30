@@ -66,6 +66,11 @@ jobs:
             # installer + build (valgfritt siden CI build allerede kjørte,
             # men på VPS er dette ofte enklest og mest deterministisk)
             npm ci
+
+            # Fjern eldre filer som ikke lenger finnes i repo (tar overskrider kun det som sendes).
+            rm -f prisma.config.ts
+            rm -rf prisma node_modules/@prisma node_modules/prisma node_modules/better-auth
+
             npm run build
 
             # pm2 restart (start hvis ikke finnes). Appen kjøres på port 3002 for å matche nginx.
