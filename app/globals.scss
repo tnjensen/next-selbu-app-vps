@@ -50,15 +50,17 @@ h1,h2,h3,h4,h5,h6{
 }
 
 .card img {
-  max-width: 100%;
+  width: 100%;
   height: auto;
   border-radius: 8px;
   display: block;
-  width: 100%;
+  object-fit: cover;
 }
 
 .card figure {
+  width: 100% !important;
   max-width: 100%;
+  margin: 0;
 }
 
 .card figure img {
