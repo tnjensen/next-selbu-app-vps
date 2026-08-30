@@ -7,7 +7,7 @@ const nextConfig: NextConfig = {
     remotePatterns: [
       {
         protocol: "https",
-        hostname: "selbu.tnjensen.com",
+        hostname: "wp.selbu.tnjensen.no",
       },
     ],
   },
