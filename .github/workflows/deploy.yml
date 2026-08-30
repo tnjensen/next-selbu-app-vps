@@ -30,8 +30,10 @@ jobs:
           tar -czf deploy.tgz \
             --exclude node_modules \
             --exclude .next \
+            --exclude .git \
+            --exclude .env \
             --exclude deploy.tgz \
-            .
+            . ; exit 0
 
       - name: Upload to VPS
         uses: appleboy/scp-action@v0.1.7
