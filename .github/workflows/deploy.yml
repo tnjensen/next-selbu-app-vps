@@ -23,6 +23,7 @@ jobs:
       - name: Build
         env:
           NODE_ENV: production
+          WP_API_URL: https://wp.selbu.tnjensen.no/wp/wp-json
         run: npm run build
 
       - name: Tar project for VPS
