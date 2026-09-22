@@ -17,13 +17,13 @@ function Footer(){
                  {date}
             </div>
             <div className="footer-social flex gap-3">
-                <Link href={"https://www.facebook.com/nils.braaten.9"}>
+                <Link href={"https://www.facebook.com/tnjensen09"}>
                     <FaFacebook />
                 </Link>
-                <Link href={"https://www.instagram.com/nilsbraaten/"}>
+                <Link href={"https://www.instagram.com/tnjensen09/"}>
                     <FaInstagram />
                 </Link>
-                <Link href={"https://linkedin.com/in/nils-braaten-95889911a"}>
+                <Link href={"https://linkedin.com/in/tnjensen09"}>
                     <FaLinkedin />
                 </Link>
             </div>
