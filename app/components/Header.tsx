@@ -28,11 +28,11 @@ export default function Header() {
 
     return (
         <header className="px-4">
-            <div className="header-content flex justify-between align-center max-w-7xl mx-auto">
+            <div className="header-content flex justify-between align-center py-2 max-w-7xl mx-auto">
                 <Link href={"/"}>
-                    <Image src={"/images/logo.jpg"} alt='Logo' width={65} height={65} className='p-4 rounded-full' />
+                    <Image src={"/images/logo.jpg"} alt='Logo' width={40} height={40} className='rounded-full' />
                 </Link>
-                <FaBars id="menu-button" className="sm:hidden cursor-pointer fixed right-3 top-3" onClick={showMenu} />
+                <FaBars id="menu-button" className="sm:hidden cursor-pointer fixed right-3 top-4" onClick={showMenu} />
                 {isMenuOpen ? (
                     <div ref={menuRef}>
                         <nav className="dropdown absolute w-50 top-10 right-3 text-center z-50 bg-[var(--background)] border border-[var(--foreground)] rounded-md p-4">
